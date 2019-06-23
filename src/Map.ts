@@ -6,10 +6,10 @@ interface Mappable {
 }
 
 export class Map {
-    private readonly googleMaps: google.maps.Map;
+    private readonly googleMap: google.maps.Map;
 
     constructor(divId: string, markers?: Mappable[]) {
-        this.googleMaps = new google.maps.Map(document.getElementById(divId), {
+        this.googleMap = new google.maps.Map(document.getElementById(divId), {
             center: {
                 lat: 0,
                 lng: 0
@@ -21,12 +21,20 @@ export class Map {
     }
 
     addMarker(mappable: Mappable): void {
-        new google.maps.Marker({
-            map: this.googleMaps,
+        const marker = new google.maps.Marker({
+            map: this.googleMap,
             position: {
                 lat: mappable.location.lat,
                 lng: mappable.location.lng
             }
+        });
+
+        marker.addListener('click', () => {
+            const infoWindow = new google.maps.InfoWindow({
+                content: 'test'
+            });
+
+            infoWindow.open(this.googleMap, marker)
         });
     }
 
